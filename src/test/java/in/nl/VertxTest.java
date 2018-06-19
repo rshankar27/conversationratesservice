@@ -12,12 +12,11 @@ import org.junit.runner.RunWith;
 @RunWith(VertxUnitRunner.class)
 public class VertxTest {
 
-    Vertx vertx = Vertx.vertx();
+    private Vertx vertx;
 
     @Before
     public void setup(TestContext testContext) {
         vertx = Vertx.vertx();
-
         vertx.deployVerticle(MyServiceVerticle.class.getName(),
                 testContext.asyncAssertSuccess());
     }
@@ -38,7 +37,6 @@ public class VertxTest {
                     });
                 });
     }
-
 
     @After
     public void tearDown(TestContext testContext) {
