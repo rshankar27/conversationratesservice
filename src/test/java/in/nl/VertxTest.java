@@ -31,7 +31,7 @@ public class VertxTest {
     public void whenReceivedResponse_thenSuccess(TestContext testContext) {
         Async async = testContext.async();
         vertx.createHttpClient()
-                .getNow(8080, "localhost", "/", response -> {
+                .getNow(9090, "localhost", "/", response -> {
                     response.handler(responseBody -> {
                         testContext.assertTrue(responseBody.toString().contains("Welcome to Vert.x Intro"));
                         async.complete();
