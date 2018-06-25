@@ -185,11 +185,4 @@
             </plugins>
         </pluginManagement>
     </build>
-    <distributionManagement>
-        <repository>
-        </repository>
-        <snapshotRepository>
-
-        </snapshotRepository>
-    </distributionManagement>
 </project>
