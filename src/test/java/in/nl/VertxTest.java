@@ -8,17 +8,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import redis.clients.jedis.Jedis;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(VertxUnitRunner.class)
 public class VertxTest {
 
     private Vertx vertx;
+    private Jedis mockJedis = mock(Jedis.class);
 
     @Before
     public void setup(TestContext testContext) {
         vertx = Vertx.vertx();
-        vertx.deployVerticle(MyServiceVerticle.class.getName(),
-                testContext.asyncAssertSuccess());
+        MyServiceVerticle serviceVerticle = new MyServiceVerticle(mockJedis);
+        when(mockJedis.incr("hits")).thenReturn(1l);
+        vertx.deployVerticle(serviceVerticle,testContext.asyncAssertSuccess());
     }
 
     @Test
@@ -32,7 +38,7 @@ public class VertxTest {
         vertx.createHttpClient()
                 .getNow(9090, "localhost", "/", response -> {
                     response.handler(responseBody -> {
-                        testContext.assertTrue(responseBody.toString().contains("Welcome to Vert.x Intro"));
+                        testContext.assertTrue(responseBody.toString().contains("Welcome to Vert.x Intro. Page hits: "+1));
                         async.complete();
                     });
                 });
