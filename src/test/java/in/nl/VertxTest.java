@@ -22,7 +22,7 @@ public class VertxTest {
     @Before
     public void setup(TestContext testContext) {
         vertx = Vertx.vertx();
-        MyServiceVerticle serviceVerticle = new MyServiceVerticle(mockJedis);
+        MyServiceVerticle serviceVerticle = new MyServiceVerticle(mockJedis,"sample");
         when(mockJedis.incr("hits")).thenReturn(1l);
         vertx.deployVerticle(serviceVerticle,testContext.asyncAssertSuccess());
     }
@@ -38,7 +38,7 @@ public class VertxTest {
         vertx.createHttpClient()
                 .getNow(9090, "localhost", "/", response -> {
                     response.handler(responseBody -> {
-                        testContext.assertTrue(responseBody.toString().contains("Welcome to Vert.x Intro. Page hits: "+1));
+                        testContext.assertTrue(responseBody.toString().contains("Welcome to Vert.x Intro. Page hits: "+1+". Request handled by sample"));
                         async.complete();
                     });
                 });
